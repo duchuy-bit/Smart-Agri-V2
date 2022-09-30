@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smartagri/Screen/AccoutScreen.dart';
-import 'package:smartagri/Screen/ChartScreen.dart';
+import 'package:smartagri/Screen/ListScreen.dart';
 import 'package:smartagri/Screen/HomeScreen.dart';
 import 'package:smartagri/Screen/ListScreen.dart';
 import 'package:smartagri/Screen/NotificationScreen.dart';
 import 'package:smartagri/data/datasetField.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'Screen/ChartScreen.dart';
 import 'Screen/Loading.dart';
 import 'data/data_sheet_api.dart';
 import 'helper/ChangeFloatToDate.dart';
@@ -72,7 +73,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
         screens =[
           HomeScreen(dataHome: listData),
           ChartScreen(dataHome: listData),
-          ListScreen(),
+          ListScreen(dataHome: listData),
           AccountScreen(),
           NotificationScreen(),
 
@@ -84,8 +85,8 @@ class _ManagerScreenState extends State<ManagerScreen> {
   int index=0;
   final items = <Widget>[
     Icon(Icons.home, size: 30),
-    Icon(Icons.list_alt_rounded, size :30),
     Icon(Icons.area_chart, size:30),
+    Icon(Icons.list_alt_rounded, size :30),
     Icon(Icons.notifications_active, size: 30),
     Icon( Icons.account_circle, size: 30),
   ];
