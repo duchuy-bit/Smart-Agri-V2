@@ -20,23 +20,33 @@ class _ChartScreenState extends State<ChartScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // ------------init gia tri lọc: gia trị bắt đầu, kết thúc;---------------
+    // giá trị thời ian lớn nhất và nhỏ nhất để kiểm tra lỗi loc -----------------
     setState(() {
-      dateStart  = DateTime(Changes().changeDoubleToDate(dataHome[0].date!).year,Changes().changeDoubleToDate(dataHome[0].date!).month,Changes().changeDoubleToDate(dataHome[0].date!).day);
-      dateFinish  = DateTime(Changes().changeDoubleToDate(dataHome[0].date!).year,Changes().changeDoubleToDate(dataHome[0].date!).month,Changes().changeDoubleToDate(dataHome[0].date!).day);
-      dateStartCheck = DateTime(Changes().changeDoubleToDate(dataHome[dataHome.length-1].date!).year,Changes().changeDoubleToDate(dataHome[dataHome.length-1].date!).month,Changes().changeDoubleToDate(dataHome[dataHome.length-1].date!).day);
-      dateFinishCheck = DateTime(Changes().changeDoubleToDate(dataHome[0].date!).year,Changes().changeDoubleToDate(dataHome[0].date!).month,Changes().changeDoubleToDate(dataHome[0].date!).day);
-
-
-      for(int i=0;i<50;i++)
-        {
-          dataTam.add(dataHome[i]);
-        }
+      dateStart  = DateTime(
+          Changes().changeDoubleToDate(dataHome[0].date!).year,
+          Changes().changeDoubleToDate(dataHome[0].date!).month,
+          Changes().changeDoubleToDate(dataHome[0].date!).day);
+      dateFinish  = DateTime(
+          Changes().changeDoubleToDate(dataHome[0].date!).year,
+          Changes().changeDoubleToDate(dataHome[0].date!).month,
+          Changes().changeDoubleToDate(dataHome[0].date!).day);
+      dateStartCheck = DateTime(
+          Changes().changeDoubleToDate(dataHome[dataHome.length-1].date!).year,
+          Changes().changeDoubleToDate(dataHome[dataHome.length-1].date!).month,
+          Changes().changeDoubleToDate(dataHome[dataHome.length-1].date!).day);
+      dateFinishCheck = DateTime(
+          Changes().changeDoubleToDate(dataHome[0].date!).year,
+          Changes().changeDoubleToDate(dataHome[0].date!).month,
+          Changes().changeDoubleToDate(dataHome[0].date!).day);
     });
-    // for(int i=0;i<=50;i++){
-    //   print(dataTam[i].date);
-    // }
+    //---------------loc gia tri để lấy thông số ngày cuối cùng------------------
+    LocData();
   }
 
+  //----------------------------------------------------------------
+  //----------------------------------------------------------------
   List <DataSet> dataTam =[];
 
   DateTime dateStart = DateTime(2022, 11, 27);
@@ -49,6 +59,8 @@ class _ChartScreenState extends State<ChartScreen> {
 
   String DateErrol = '';
   String DateErrolFinish = '';
+  //----------------------------------------------------------------
+  //----------------------------------------------------------------
 
 //-------------------------function loc du lieu-----------------
   void LocData(){
@@ -83,15 +95,17 @@ class _ChartScreenState extends State<ChartScreen> {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
+          //-----------------------------Pannel Tiêu đề-----------------------------------
           PanelList(),
+
+          //----------------------------Pannel hiển thị số dòng dữ liệu được lọc------------------------------------
           PanelLengthList(),
+
+          //-----------------Table dữ liệu được lọc --------------------
           Flexible(
               child:
               ListView(
                 children: <Widget>[
-
-
-
                   SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SingleChildScrollView(
@@ -163,7 +177,6 @@ class _ChartScreenState extends State<ChartScreen> {
 
             GestureDetector(
               onTap: () async {
-
                 DateTime? newDate = await showDatePicker(
                   context: context,
                   initialDate: dateStart,
@@ -171,11 +184,14 @@ class _ChartScreenState extends State<ChartScreen> {
                   lastDate: DateTime(2030),
                 );
 
+                //-------------------------người dùng Cancel việc nhập dữ liệu---------------------------------------
                 if(newDate == null) return;
 
+                //-------------------------------Check lỗi---------------------------------
                 if(newDate.compareTo(dateStartCheck)< 0 ){
                   print('loi');
 
+                  //----------------------------Alert thông báo lỗi------------------------------------
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
@@ -191,7 +207,7 @@ class _ChartScreenState extends State<ChartScreen> {
                   );
                   return ;
                 }
-
+                //-----------------------nếu không lỗi thì lấy dữ liệu và lọc-----------------------------------------
                 setState(() {
                   DateErrol = '';
                   dateStart = newDate;
@@ -237,9 +253,7 @@ class _ChartScreenState extends State<ChartScreen> {
                 if(newDate1.compareTo(dateFinishCheck)> 0 ){
                   print('loi');
 
-                  // setState(() {
-                  //   DateErrolFinish = 'Vui lòng nhập ngày Kết thúc Nhỏ hơn';
-                  // });
+                  //-------------------------Alert thông báo lỗi---------------------------------------
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
@@ -293,7 +307,6 @@ class _ChartScreenState extends State<ChartScreen> {
       width: MediaQuery.of(context).size.width,
       height: 60,
       child: Container(
-        // padding: const EdgeInsets.only(top: 20,bottom: 30,left: 5,right: 5),
         height: 50,
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
@@ -313,21 +326,21 @@ class _ChartScreenState extends State<ChartScreen> {
 
 
   Widget buildDataTable() {
-    final columns = [ 'Ngày', 'Thời gian', 'Độ ẩm 1', 'Độ ẩm 2', 'Độ ẩm 3','Nhiệt độ 1',"Nhiệt độ 2",'Nhiệt độ 3',"Ánh sáng 1",'Ánh sáng 2','Ánh sáng 3'];
-
+    final columns = [
+      'Ngày', 'Thời gian', 'Độ ẩm 1', 'Độ ẩm 2', 'Độ ẩm 3',
+      'Nhiệt độ 1',"Nhiệt độ 2",'Nhiệt độ 3',
+      "Ánh sáng 1",'Ánh sáng 2','Ánh sáng 3'
+    ];
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         DataTable(
           sortAscending: isAscending,
           sortColumnIndex: sortColumnIndex,
           columns: getColumns(columns),
           rows: getRows(dataTam),
         ),
-
-        // Test(Colors.white),
       ],
     );
   }
@@ -336,16 +349,16 @@ class _ChartScreenState extends State<ChartScreen> {
       .map((String column) => DataColumn(
     label: Text(column,style: TextStyle(fontWeight: FontWeight.bold),),
     onSort: onSort,
-  ))
-      .toList();
+  )).toList();
 
   List<DataRow> getRows(List<DataSet> users) => users.map((DataSet user) {
-    // String date= "${Changes().changeDoubleToDate(user.date!).day}/${Changes().changeDoubleToDate(user.date!).month}/${Changes().changeDoubleToDate(user.date!).year}";
     String date =Changes().DateChange(user.date!);
-    // String time ="${Changes().changeDoubleToDate(user.time!).hour}: ${Changes().changeDoubleToDate(user.time!).minute}";
     String time = user.time!;
-    final cells = [date, time,user.humidity1,user.humidity2,user.humidity3, user.temperature1,user.temperature2,user.temperature3,user.light1,user.light2,user.light3];
-
+    final cells = [
+      date, time,user.humidity1,user.humidity2,user.humidity3,
+      user.temperature1,user.temperature2,user.temperature3,
+      user.light1,user.light2,user.light3
+    ];
     return DataRow(cells: getCells(cells));
   }).toList();
 

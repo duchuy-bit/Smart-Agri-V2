@@ -19,15 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
 
-    // var hour = Changes().changeDoubleToDate(dataHome[0].time.toString()).hour.toString();
-    // var n = double.parse(dataHome[0].time!);
-    // print (n);
-    // print(Changes().changeDoubleToDate(dataHome[0].time!).hour.toString());
-
     print(Changes().getTime(dataHome[0].time!));
-    // for(int i=0;i<=50;i++)
-    //   print('${dataHome[i].time}');
-    // print(dataHome[1].humidity1);
   }
 
   @override
@@ -36,59 +28,30 @@ class _HomeScreenState extends State<HomeScreen> {
       child:
       Container(
         width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
+            //---------- Hien thi thoi gian, ngay thang va logo Smart Agri--------------
             Taskbar(),
 
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 35,left: 20),
-            //   child: Text('Thông số',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 5,left: 25),
-            //   child: Text('    cảm biến',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-            // ),
-            //
-            // Text(Changes().DateChange(dataHome[0].date.toString()),style: TextStyle(fontSize: 20,color: Colors.black26,),),
-            //
-
-            // Title(),
-
-
+            //------------------Text Tên Screen -------------------
             Padding(
               padding: const EdgeInsets.only(top: 30),
               child: TextHome('Thông số cảm biến', 30, true,Colors.black),
             ),
 
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 15,bottom: 15),
-            //   child: TextHome(Changes().DateChange(dataHome[0].date.toString()), 20, false,Colors.blueGrey),
-            // ),
-
-            // TextHome(Changes().getTime(dataHome[0].time!), 20, false,Colors.blueGrey),
-            // TextHome(dataHome[0].time!.toString(), 20, false,Colors.blueGrey),
-
-            // Text('NTU SmartAgri',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-
-            // dataHome[0].time>0.22916666666666666 and
-
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 25,bottom: 25),
-            //   child: IconHome(),
-            // ),
-
+            // -------------Table thông số-------------------
             Padding(
               padding: const EdgeInsets.only(top: 25),
               child: PanelHome(1, dataHome[0].temperature1!, dataHome[0].humidity1!, dataHome[0].light1!),
             ),
-            // PanelHome(2, dataHome[0].temperature2!, dataHome[0].humidity2!, dataHome[0].light2!),
-            // PanelHome(3, dataHome[0].temperature3!, dataHome[0].humidity3!, dataHome[0].light3!),
-            NoteDetail(),
 
-            // Footer(),
+            // -----------------chú thích và ảnh cây sa nhân tím----------------
+            NoteDetail(),
           ],
         ),
       ),
@@ -102,18 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            // width: MediaQuery.of(context).size.width/2-55,
-            // height: MediaQuery.of(context).size.width/2-50,
-
             decoration: BoxDecoration(
-              // color: Colors.pinkAccent,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 5,
                   blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
+                  offset: Offset(0, 3),
                 ),
               ],
 
@@ -129,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           Container(
-            // width: MediaQuery.of(context).size.width/2-30,
             height: MediaQuery.of(context).size.width/2-60,
             decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -196,12 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('${Changes().getAMPM(dataHome[0].time!)} ',style: TextStyle(fontSize: 12),),
                 ),
 
-                // Text(Changes().getAMPM(dataHome[0].time!))
                 Changes().getIcon(dataHome[0].time!) == 'AM'?
                 Icon(Icons.wb_sunny_outlined,size:24):
                 Icon(Icons.bedtime_outlined,size:  24),
 
-                // IconHome(),
               ],
             ),
 
@@ -214,7 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             )
-            // Text(Changes().getTime(dataHome[0].time!),style: TextStyle(fontSize: 30),)
           ],
         ),
         // ---------------------logo ----------------------
@@ -228,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
+                offset: Offset(0, 3),
               ),
             ],
           ),
@@ -267,7 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
     padding: const EdgeInsets.only(bottom: 25),
     child: Container(
       width: MediaQuery.of(context).size.width-50,
-      // height: 50,
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(25),
@@ -326,19 +280,4 @@ class _HomeScreenState extends State<HomeScreen> {
       checkFontWeight? Text(s,style: TextStyle(fontSize: size,fontWeight: FontWeight.bold,color: color),)
     : Text(s,style: TextStyle(fontSize: size,color: color),);
 
-  Widget IconHome()=>Container(
-    child: double.parse(dataHome[0].time!) > 0.22916666666666666 &&
-           double.parse(dataHome[0].time!) < 0.7291666666666666
-        ? Icon(Icons.sunny, size:30)
-        : Icon(Icons.bedtime_outlined,size:30)
-    ,
-  );
-
-  Widget Footer()=>Container(
-    width: MediaQuery.of(context).size.width,
-    height: 80,
-    decoration: BoxDecoration(
-      color: Colors.white
-    ),
-  );
 }
