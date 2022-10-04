@@ -129,7 +129,6 @@ class _ListScreenState extends State<ListScreen> {
       color: Color(0xff6849ef) ,
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(50.0),
-            // bottomRight: Radius.circular(-50.0)
         ),
       gradient: LinearGradient(
           colors: [
