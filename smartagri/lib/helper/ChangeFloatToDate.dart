@@ -10,6 +10,12 @@ class Changes{
     return DateTime.fromMillisecondsSinceEpoch(millis.toInt(), isUtc: true);
   }
 
+  String Div10 (num n){
+    double tam = double.parse(n.toString());
+    tam=tam/10;
+    return tam.toString();
+  }
+
 
 
   String Humidity(String n){

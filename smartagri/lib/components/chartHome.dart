@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
+
 import 'package:smartagri/data/chartData.dart';
 
 import '../data/datasetField.dart';
@@ -8,26 +10,50 @@ import 'chartTitle.dart';
 
 class ChartHomePage extends StatefulWidget {
   List <chartData> data;
-  ChartHomePage({ Key? key, required this.data }) : super(key: key);
+  List dataY;
+  int index;
+  ChartHomePage({ Key? key, required this.data, required this.dataY, required this.index }) : super(key: key);
 
   @override
-  State<ChartHomePage> createState() => _ChartHomePageState(data);
+  State<ChartHomePage> createState() => _ChartHomePageState(data,dataY,index);
 }
 
 class _ChartHomePageState extends State<ChartHomePage> {
 
   final List <chartData> data;
-  _ChartHomePageState(this.data);
+  final List dataY;
+  final int index;
+  _ChartHomePageState(this.data,this.dataY, this.index);
+
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // setDefaultMINMAXY();
+
     for (int i=0;i<12;i++){
       print("- ${data[i].date} ${data[i].time} ${data[i].n1} ${data[i].n2} ${data[i].n3}");
     }
-  }
 
+    // print(double.parse(((double.parse(dataY[0].toString()).toInt())~/10 ).toString()));
+    // print(double.parse(((double.parse(dataY[0].toString()).toInt())~/10 *10 +10 ).toString()));
+    //
+    // print(double.parse(((double.parse(dataY[1].toString()).toInt())~/10 ).toString()));
+    // print(double.parse(((double.parse(dataY[1].toString()).toInt())~/10 *10 ).toString()));
+
+    print("index = $index");
+    print(double.parse(((double.parse(dataY[0].toString()).toInt())~/(10) *10 +10 ).toString()));
+
+    int somu=1;
+    for (int i=0;i< dataY[0].toInt().toString().length-1 ;i++) somu=somu*10;
+    print((dataY[0].toString().length-1));
+    print(somu);
+
+    print(double.parse((((double.parse(dataY[0].toString()).toInt())~/(somu)+1)*somu ).toString()));
+    print(double.parse((((double.parse(dataY[1].toString()).toInt())~/(somu)+1)*somu ).toString()));
+  }
 
   @override
   Widget build(BuildContext context) =>
@@ -54,62 +80,62 @@ class _ChartHomePageState extends State<ChartHomePage> {
                           case 1:
                             text = Text('${Changes().getTime(
                                 data[data.length - 12].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 2:
                             text = Text('${Changes().getTime(
                                 data[data.length - 11].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 3:
                             text = Text('${Changes().getTime(
                                 data[data.length - 10].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 4:
                             text = Text('${Changes().getTime(
                                 data[data.length - 9].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 5:
                             text = Text('${Changes().getTime(
                                 data[data.length - 8].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 6:
                             text = Text('${Changes().getTime(
                                 data[data.length - 7].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 7:
                             text = Text('${Changes().getTime(
                                 data[data.length - 6].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 8:
                             text = Text('${Changes().getTime(
                                 data[data.length - 5].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 9:
                             text = Text('${Changes().getTime(
                                 data[data.length - 4].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 10:
                             text = Text('${Changes().getTime(
                                 data[data.length - 3].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 11:
                             text = Text('${Changes().getTime(
                                 data[data.length - 2].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           case 12:
                             text = Text('${Changes().getTime(
                                 data[data.length - 1].time!.toString())}',
-                              style: TextStyle(fontSize: 18,),);
+                              style: TextStyle(fontSize: 16,),);
                             break;
                           default:
                             text = const Text('');
@@ -146,40 +172,111 @@ class _ChartHomePageState extends State<ChartHomePage> {
                         );
                         String text;
                         switch (value.toInt()) {
+                          case 0:
+                            text = '0';
+                            break;
                           case 10:
-                            text = '10';
+                            dataY[2] == 3 ? text ='': text = '10';
                             break;
                           case 20:
-                            text = '20';
+                            dataY[2] == 3? text ="": text = '20';
+                            break;
+                          case 22:      //--temperature
+                            dataY[2] ==1 ? text = '22': text ="";
+                            break;
+                          case 24: //--temperature
+                            dataY[2] ==1 ? text = '24': text ="";
+                            break;
+                          case 26: //--temperature
+                            dataY[2] ==1 ?  text = '26': text = "";
+                            break;
+                          case 28: //--temperature
+                            dataY[2] ==1 ? text = '28': text = "";
                             break;
                           case 30:
-                            text = '30';
+                            dataY[2] == 3? text ="30": text = '30';
+                            break;
+                          case 32: //--temperature
+                            dataY[2] ==1 ? text = '32': text ="";
+                            break;
+                          case 34:
+                            dataY[2] ==1 ?  text = '34': text ="";
+                            break;
+                          case 36: //--temperature
+                            dataY[2] ==1 ?  text = '36': text ="";
+                            break;
+                          case 38: //--temperature
+                            dataY[2] ==1 ? text = '38': text="";
                             break;
                           case 40:
-                            text = '40';
+                            dataY[2] == 3? text ="": text = '40';
                             break;
                           case 50:
-                            text = '50';
+                            dataY[2] == 3? text ="": text = '50';
                             break;
                           case 60:
-                            text = '60';
+                            dataY[2] == 3? text ="": text = '60';
                             break;
                           case 70:
-                            text = '70';
+                            dataY[2] == 3? text ="": text = '70';
                             break;
                           case 80:
-                            text = '80';
+                            dataY[2] == 3? text ="": text = '80';
                             break;
                           case 90:
-                            text = '90';
+                            dataY[2] == 3? text ="": text = '90';
                             break;
-                          // case 300:
-                          //   text = '300';
-                          //   break;
+                          case 100:
+                            dataY[2] == 3? text ="100": text = '100';
+                            break;
+                          case 200:
+                            text = "200";
+                            break;
+                          case 300:
+                            text = "300";
+                            break;
+                          case 400:
+                            text = "400";
+                            break;
+                          case 500:
+                            text = "500";
+                            break;
+                          case 600:
+                            text = "600";
+                            break;
+                          case 1000:
+                            text = "1k";
+                            break;
+                          case 2000:
+                            text = "2k";
+                            break;
+                          case 3000:
+                            text = "3k";
+                            break;
+                          case 4000:
+                            text = "4k";
+                            break;
+                          case 5000:
+                            text = "5k";
+                            break;
+                          case 6000:
+                            text = "6k";
+                            break;
+                          case 7000:
+                            text = "7k";
+                            break;
+                          case 8000:
+                            text = "8k";
+                            break;
+                          case 9000:
+                            text = "9k";
+                            break;
+                          case 10000:
+                            text = "10k";
+                            break;
                           default:
                             return Container();
                         }
-
                         return Text(
                             text, style: style, textAlign: TextAlign.center);
                       },
@@ -194,15 +291,12 @@ class _ChartHomePageState extends State<ChartHomePage> {
                 lineBarsData: [
                   LineChartBarData(
                     isCurved: false,
-                    color: Colors.redAccent,
-                    barWidth: 2,
+                    color: Colors.red,
+                    barWidth: 3,
                     isStrokeCapRound: true,
-                    dotData: FlDotData(show: true),
+                    // dotData: FlDotData(show: true),
                     belowBarData: BarAreaData(show: false),
                     spots: [
-                      // for(int i=0;i<3;i++){
-
-                      // },
                       FlSpot(1, data[data.length - 12].n1!.toDouble()),
                       FlSpot(2, data[data.length - 11].n1!.toDouble()),
                       FlSpot(3, data[data.length - 10].n1!.toDouble()),
@@ -219,10 +313,9 @@ class _ChartHomePageState extends State<ChartHomePage> {
                   ),
                   LineChartBarData(
                     isCurved: false,
-                    color: Colors.lightBlueAccent,
-                    barWidth: 2,
+                    color: Colors.blue,
+                    barWidth: 3,
                     isStrokeCapRound: true,
-                    dotData: FlDotData(show: true),
                     belowBarData: BarAreaData(
                       show: false,
                       color: const Color(0x00aa4cfc),
@@ -246,9 +339,8 @@ class _ChartHomePageState extends State<ChartHomePage> {
                   LineChartBarData(
                     isCurved: false,
                     color: Colors.green,
-                    barWidth: 2,
+                    barWidth: 3,
                     isStrokeCapRound: true,
-                    dotData: FlDotData(show: true),
                     belowBarData: BarAreaData(show: false),
                     spots:
                     [
@@ -266,13 +358,12 @@ class _ChartHomePageState extends State<ChartHomePage> {
                       FlSpot(11, data[data.length - 2].n3!.toDouble()),
                       FlSpot(12, data[data.length - 1].n3!.toDouble()),
                     ],
-
                   ),
                 ],
                 minX: 0,
                 maxX: 13,
-                maxY: 100,
-                minY: 0,
+                maxY: double.parse(((double.parse(dataY[0].toString()).toInt())~/10 *10 +10 ).toString()),
+                minY: double.parse(((double.parse(dataY[1].toString()).toInt())~/10 *10 ).toString()),
               )
           )
       );

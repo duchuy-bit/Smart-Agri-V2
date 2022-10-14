@@ -256,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],),
 
             RowPanel(1, num.parse(Changes().Humidity(dataHome[0].temperature1.toString())), num.parse(Changes().Humidity(dataHome[0].temperature2.toString())), num.parse(Changes().Humidity(dataHome[0].temperature3.toString()))),
-            RowPanel(2, dataHome[0].humidity1!, dataHome[0].humidity2!, dataHome[0].humidity3!),
+            RowPanel(2, num.parse(Changes().Div10(dataHome[0].humidity1!)), num.parse(Changes().Div10(dataHome[0].humidity2!)), num.parse(Changes().Div10(dataHome[0].humidity3!))),
             RowPanel(3, dataHome[0].light1!, dataHome[0].light2!, dataHome[0].light3!),
 
           ],

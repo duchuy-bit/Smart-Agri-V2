@@ -3,7 +3,7 @@ import 'package:smartagri/Screen/AccoutScreen.dart';
 import 'package:smartagri/Screen/ListScreen.dart';
 import 'package:smartagri/Screen/HomeScreen.dart';
 import 'package:smartagri/Screen/ListScreen.dart';
-import 'package:smartagri/Screen/NotificationScreen.dart';
+import 'package:smartagri/components/ListComponent.dart';
 import 'package:smartagri/data/datasetField.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'Screen/ChartScreen.dart';
@@ -75,7 +75,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
           ChartScreen(dataHome: listData),
           ListScreen(dataHome: listData),
           AccountScreen(),
-          NotificationScreen(),
+          ListComponent(dataHome: listData,),
 
         ];
       });
@@ -85,8 +85,8 @@ class _ManagerScreenState extends State<ManagerScreen> {
   int index=0;
   final items = <Widget>[
     Icon(Icons.home, size: 30),
-    Icon(Icons.area_chart, size:30),
-    Icon(Icons.list_alt_rounded, size :30),
+    Icon(Icons.bar_chart_rounded, size:30),
+    Icon(Icons.format_list_bulleted_rounded, size :30),
     Icon(Icons.notifications_active, size: 30),
     Icon( Icons.account_circle, size: 30),
   ];
