@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartagri/helper/ChangeFloatToDate.dart';
 import 'dart:math';
 import '../components/chartHome.dart';
 import '../data/chartData.dart';
@@ -42,7 +43,6 @@ class _ChartScreenState extends State<ChartScreen> {
       }
       m1 = double.parse(tam.reduce(max).toString());
       min1 = double.parse(tam.reduce(min).toString());
-      print("maxy = $m1, min = $min1");
 
       //----------max khu vuc 2----------
       tam.removeRange(0, tam.length);
@@ -51,7 +51,6 @@ class _ChartScreenState extends State<ChartScreen> {
       }
       m2 = double.parse(tam.reduce(max).toString());
       min2 = double.parse(tam.reduce(min).toString());
-      print("maxy = $m2, min = $min2");
 
       //---------max khu vuc 3--------------
       tam.removeRange(0, tam.length);
@@ -61,7 +60,6 @@ class _ChartScreenState extends State<ChartScreen> {
       m3 = double.parse(tam.reduce(max).toString());
       min3 = double.parse(tam.reduce(min).toString());
 
-      print("maxy = $m3, min = $min3");
 
       maxy= m1;
       if (maxy < m2) maxy =m2;
@@ -72,8 +70,8 @@ class _ChartScreenState extends State<ChartScreen> {
       if(miny > min3) miny = min3;
 
       dataY.removeRange(0, 3);
-      dataY.add(maxy);
-      dataY.add(miny);
+      dataY.add(Changes().roundData(maxy.toString(), true));
+      dataY.add(Changes().roundData(miny.toString(), false));
       dataY.add(indexMenu);
       print("max arr = ${dataY[0]} ---  ${dataY[1]}");
 
@@ -84,12 +82,15 @@ class _ChartScreenState extends State<ChartScreen> {
           double t1 = double.parse(dataHome[0].temperature1.toString())/10;       dataSlider.add(t1);
           t1 = double.parse(dataHome[0].temperature2.toString())/10;        dataSlider.add(t1);
           t1 = double.parse(dataHome[0].temperature3.toString())/10;       dataSlider.add(t1);
+
           t1 = double.parse(dataHome[0].ND_A1_MIN.toString())/10;       dataSlider.add(t1);
-          t1 = double.parse(dataHome[0].ND_A2_MIN.toString())/10;       dataSlider.add(t1);
-          t1 = double.parse(dataHome[0].ND_A3_MIN.toString())/10;       dataSlider.add(t1);
+          t1 = double.parse(dataHome[0].ND_A2_MIN.toString())/10;    dataSlider.add(t1);
+          t1 = double.parse(dataHome[0].ND_A3_MIN.toString())/10;      dataSlider.add(t1);
+
           t1 = double.parse(dataHome[0].ND_A1_MAX.toString())/10;       dataSlider.add(t1);
           t1 = double.parse(dataHome[0].ND_A2_MAX.toString())/10;    dataSlider.add(t1);
           t1 = double.parse(dataHome[0].ND_A3_MAX.toString())/10;      dataSlider.add(t1);
+          dataSlider.add(1);
         }
       else
       if (indexMenu ==2)
@@ -103,25 +104,24 @@ class _ChartScreenState extends State<ChartScreen> {
         t1 = double.parse(dataHome[0].DA_A1_MIN.toString())/10;       dataSlider.add(t1);
         t1 = double.parse(dataHome[0].DA_A2_MIN.toString())/10;       dataSlider.add(t1);
         t1 = double.parse(dataHome[0].DA_A3_MIN.toString())/10;       dataSlider.add(t1);
+
         t1 = double.parse(dataHome[0].DA_A1_MAX.toString())/10;       dataSlider.add(t1);
-        t1 = double.parse(dataHome[0].DA_A2_MAX.toString())/10;    dataSlider.add(t1);
-        t1 = double.parse(dataHome[0].DA_A3_MAX.toString())/10;      dataSlider.add(t1);
+        t1 = double.parse(dataHome[0].DA_A2_MAX.toString())/10;       dataSlider.add(t1);
+        t1 = double.parse(dataHome[0].DA_A3_MAX.toString())/10;       dataSlider.add(t1);
+        dataSlider.add(0);
       }
       else
       {
         dataSlider.add(dataHome[0].light1); dataSlider.add(dataHome[0].light2); dataSlider.add(dataHome[0].light3);
-        dataSlider.add(dataHome[0].AS_A1_MIN); dataSlider.add(dataHome[0].AS_A2_MIN); dataSlider.add(dataHome[0].AS_A3_MIN);
-        dataSlider.add(dataHome[0].AS_A1_MAX); dataSlider.add(dataHome[0].AS_A2_MAX); dataSlider.add(dataHome[0].AS_A3_MAX);
-      }
-      print('Data Slider: ');
-      dataSlider.forEach((element) {
-        print("$element   ");
-      });
-      // dataSlider.add(value)
+        dataSlider.add(dataHome[0].AS_A1_MIN);
+        dataSlider.add(dataHome[0].AS_A2_MIN);
+        dataSlider.add(dataHome[0].AS_A3_MIN);
 
-      print('set if');
-      print('data ${dataSlider[2]}');
-      print((dataSlider[2]> dataSlider[8]) && (dataSlider[2]< dataSlider[5]));
+        dataSlider.add(dataHome[0].AS_A1_MAX);
+        dataSlider.add(dataHome[0].AS_A2_MAX);
+        dataSlider.add(dataHome[0].AS_A3_MAX);
+        dataSlider.add(0);
+      }
     });
   }
 
@@ -130,6 +130,7 @@ class _ChartScreenState extends State<ChartScreen> {
     // TODO: implement initState
     super.initState();
     setState(() {
+      // print(BodyChartScreen().);
       dataChart.removeRange(0, dataChart.length);
       for (int i=11;i>=0;i--){
         var t1 = double.parse(dataHome[i].temperature1.toString())/10;
@@ -152,117 +153,64 @@ class _ChartScreenState extends State<ChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.purple[100] ,
-            gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xffe1bee7),
-                  Color(0xfff3e5f5),
-                  Color(0xffFFFFFF)
-                ]
-            )
-        ),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            Stack(
-              children: <Widget>[
-                Pannel(),
-                Menu(),
-              ],
-            ),
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.purple[100] ,
+          gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xffe1bee7),
+                Color(0xfff3e5f5),
+                Color(0xffFFFFFF)
+              ]
+          )
+      ),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          //-----------------MENU ---------------------------------------------
+          Stack(
+            children: <Widget>[
+              Pannel(),
+              Menu(),
+            ],
+          ),
 
-            //-------------------- trang thai cong tac, nguong thiet lap, gia tri hien tai--------------
-            // ThreeDetail(),
-            SliderValue(),
+          BodyChartScreen(),
 
-            //------------------CHART_---------------------------
-            Padding(
-              padding: const EdgeInsets.only(top: 5,left: 5,right: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 3  ,left: 8,right: 8,bottom: 16),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10,bottom: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Biểu đồ giá trị  ',style: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold)),
-                              indexMenu ==1?
-                              Text('Nhiệt Độ',style: TextStyle(fontSize: 18,color: Colors.red,fontWeight: FontWeight.bold))
-                                  : indexMenu == 2? Text('Độ Ẩm',style: TextStyle(fontSize: 18,color: Colors.blue,fontWeight: FontWeight.bold))
-                              : Text('Ánh Sáng',style: TextStyle(fontSize: 18,color: Colors.green,fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                          width: MediaQuery.of(context).size.width-20,
-                          height: MediaQuery.of(context).size.width-30,
-                          child: ChartHomePage(data: dataChart,dataY: dataY,index: index,)),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10,left: 20,right: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.linear_scale_outlined,size: 40,color: Colors.red,),
-                                Text(' KV1',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.linear_scale_outlined,size: 40,color: Colors.blue,),
-                                Text(' KV2',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.linear_scale_outlined,size: 40,color: Colors.green,),
-                                Text(' KV3',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-                              ],
-                            )
-
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // ThreeDetail(),
-          ],
-        ),
+        ],
       ),
     );
   }
 
+  Widget BodyChartScreen()=>Expanded(
+    child: SingleChildScrollView(
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //-------------------- trang thai cong tac, nguong thiet lap, gia tri hien tai--------------
+            SliderValue(),
+
+            //------------------CHART_---------------------------
+            ChartComponentImport(),
+
+            //------------FOOTER-------------------
+            Container(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
   Widget SliderValue()=>SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     child: Padding(
-      padding: const EdgeInsets.only(left: 10,top: 10,right: 10,bottom: 15),
+      padding: const EdgeInsets.only(left: 10,top: 15,right: 10,bottom: 15),
       child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -346,19 +294,26 @@ class _ChartScreenState extends State<ChartScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text("KV1: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                            (dataSlider[0]> dataSlider[6]) || (dataSlider[0]< dataSlider[3])? Text(' ON'): Text('OFF'),
+                            dataSlider[dataSlider.length-1] == 1
+                              ? dataSlider[0] > dataSlider[6]? Text("ON"): Text('OFF')
+                              : dataSlider[0] < dataSlider[3]? Text('ON'): Text("OFF"),
+                            // (dataSlider[0]> dataSlider[6]) || (dataSlider[0]< dataSlider[3])? Text(' ON'): Text('OFF'),
                           ],
                         ),
                         Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text("KV2: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                            (dataSlider[1]> dataSlider[7]) || (dataSlider[1]< dataSlider[4])? Text(' ON'): Text('OFF'),
+                            dataSlider[dataSlider.length-1] == 1
+                                ? dataSlider[1] > dataSlider[7]? Text("ON"): Text('OFF')
+                                : dataSlider[1] < dataSlider[4]? Text('ON'): Text("OFF"),
                           ],
                         ),
                         Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text("KV3: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                            (dataSlider[2]> dataSlider[8]) || (dataSlider[2]< dataSlider[5])? Text(' ON'): Text('OFF'),
+                            dataSlider[dataSlider.length-1] == 1
+                                ? dataSlider[2] > dataSlider[8]? Text("ON"): Text('OFF')
+                                : dataSlider[2] < dataSlider[5]? Text('ON'): Text("OFF"),
                           ],
                         )
                       ],
@@ -451,6 +406,77 @@ class _ChartScreenState extends State<ChartScreen> {
               ),
             ],
           )
+      ),
+    ),
+  );
+
+  Widget ChartComponentImport()=>Padding(
+    padding: const EdgeInsets.only(top: 5,left: 5,right: 5),
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(40),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 3  ,left: 8,right: 8,bottom: 16),
+        child: Column(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10,bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Biểu đồ giá trị  ',style: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold)),
+                    indexMenu ==1?
+                    Text('Nhiệt Độ',style: TextStyle(fontSize: 18,color: Colors.red,fontWeight: FontWeight.bold))
+                        : indexMenu == 2? Text('Độ Ẩm',style: TextStyle(fontSize: 18,color: Colors.blue,fontWeight: FontWeight.bold))
+                        : Text('Ánh Sáng',style: TextStyle(fontSize: 18,color: Colors.green,fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width-20,
+                height: MediaQuery.of(context).size.width-30,
+                child: ChartHomePage(data: dataChart,dataY: dataY,index: index,)),
+            Padding(
+              padding: const EdgeInsets.only(top: 10,left: 20,right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.linear_scale_outlined,size: 40,color: Colors.red,),
+                      Text(' KV1',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.linear_scale_outlined,size: 40,color: Colors.blue,),
+                      Text(' KV2',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.linear_scale_outlined,size: 40,color: Colors.green,),
+                      Text(' KV3',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                    ],
+                  )
+
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     ),
   );
@@ -616,7 +642,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
                     dataChart.add(tam);
                   }
-                  print('-----------------------');
+                  // print('-----------------------');
                   setDefaultMINMAXY();
                   // index = 1;
                   // for (int i=0;i<12;i++){
@@ -652,7 +678,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
                     dataChart.add(tam);
                   }
-                  print('-----------------------');
+                  // print('-----------------------');
                   setDefaultMINMAXY();
 
                   // for (int i=0;i<12;i++){
@@ -689,7 +715,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
                     dataChart.add(tam);
                   }
-                  print('-----------------------');
+                  // print('-----------------------');
                   setDefaultMINMAXY();
 
                   // for (int i=0;i<12;i++){

@@ -9,6 +9,39 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.pinkAccent,
+            ),
+          ),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: 900,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Container(
+                    height: 900,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+
+        ],
+      ),
+    );
   }
 }

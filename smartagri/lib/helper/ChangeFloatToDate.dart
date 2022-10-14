@@ -10,6 +10,44 @@ class Changes{
     return DateTime.fromMillisecondsSinceEpoch(millis.toInt(), isUtc: true);
   }
 
+  int roundData(String n,bool checkMaxMin){
+    // checkMaxMin = true => max
+    // checkMaxMin = false => min
+    double tam = double.parse(n);
+    int tamInt ;
+    tamInt =  tam.toInt();
+    // print('int = $tamInt');
+    int length = tam.toString().length-1;
+    // print('length = $length');
+    int s=1;
+
+    for (int i=1; i<length-1 ;i++) s=s*10;
+    // print('somu = $s');
+
+
+
+    // int tamInt = int.parse((tam ~/ s).toString());
+    tamInt=tamInt ~/ s;
+    // print('Dư: $tamInt');
+
+    int miner = 5 * s ~/10;
+    miner = miner + (tamInt)*s;
+    // print("miner = $miner");
+
+    if (checkMaxMin) {
+      // int t= tamint;
+      tamInt = (tamInt + 1) * s;
+
+      if ((length >= 4) &&(tam.toInt() < miner))
+        {
+          tamInt = miner;
+        }
+    } else {
+      tamInt = tamInt * s;
+    }
+    return tamInt;
+  }
+
   String Div10 (num n){
     double tam = double.parse(n.toString());
     tam=tam/10;

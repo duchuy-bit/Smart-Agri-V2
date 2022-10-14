@@ -24,47 +24,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Column(
-          children: [
-            Flexible(
-              child:
-              ListView(
-                children: <Widget>[
-                  Text(''),
-                    Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  //---------- Hien thi thoi gian, ngay thang va logo Smart Agri--------------
-                  Taskbar(),
+    return Center(
+      child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child:
+                ListView(
+                  children: <Widget>[
+                    Text(''),
+                      Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    //---------- Hien thi thoi gian, ngay thang va logo Smart Agri--------------
+                    Taskbar(),
 
-                  //------------------Text Title Screen -------------------
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: TextHome('Thông số cảm biến', 30, true,Colors.black),
-                  ),
+                    //------------------Text Title Screen -------------------
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: TextHome('Thông số cảm biến', 30, true,Colors.black),
+                    ),
 
-                  // -------------Table thông số-------------------
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25),
-                    child: PanelHome(1, dataHome[0].temperature1!, dataHome[0].humidity1!, dataHome[0].light1!),
-                  ),
+                    // -------------Table thông số-------------------
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25),
+                      child: PanelHome(1, dataHome[0].temperature1!, dataHome[0].humidity1!, dataHome[0].light1!),
+                    ),
 
-                  // -----------------chú thích và ảnh cây sa nhân tím----------------
-                  NoteDetail(),
-                ],
+                    // -----------------chú thích và ảnh cây sa nhân tím----------------
+                    NoteDetail(),
+                  ],
+                ),
+                  ],
+                )
               ),
-                ],
-              )
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+    );
   }
 
   Widget NoteDetail()=>Container(

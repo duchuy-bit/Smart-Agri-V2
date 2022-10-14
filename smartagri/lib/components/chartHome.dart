@@ -31,28 +31,6 @@ class _ChartHomePageState extends State<ChartHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // setDefaultMINMAXY();
-
-    for (int i=0;i<12;i++){
-      print("- ${data[i].date} ${data[i].time} ${data[i].n1} ${data[i].n2} ${data[i].n3}");
-    }
-
-    // print(double.parse(((double.parse(dataY[0].toString()).toInt())~/10 ).toString()));
-    // print(double.parse(((double.parse(dataY[0].toString()).toInt())~/10 *10 +10 ).toString()));
-    //
-    // print(double.parse(((double.parse(dataY[1].toString()).toInt())~/10 ).toString()));
-    // print(double.parse(((double.parse(dataY[1].toString()).toInt())~/10 *10 ).toString()));
-
-    print("index = $index");
-    print(double.parse(((double.parse(dataY[0].toString()).toInt())~/(10) *10 +10 ).toString()));
-
-    int somu=1;
-    for (int i=0;i< dataY[0].toInt().toString().length-1 ;i++) somu=somu*10;
-    print((dataY[0].toString().length-1));
-    print(somu);
-
-    print(double.parse((((double.parse(dataY[0].toString()).toInt())~/(somu)+1)*somu ).toString()));
-    print(double.parse((((double.parse(dataY[1].toString()).toInt())~/(somu)+1)*somu ).toString()));
   }
 
   @override
@@ -171,112 +149,18 @@ class _ChartHomePageState extends State<ChartHomePage> {
                           fontSize: 14,
                         );
                         String text;
-                        switch (value.toInt()) {
-                          case 0:
-                            text = '0';
-                            break;
-                          case 10:
-                            dataY[2] == 3 ? text ='': text = '10';
-                            break;
-                          case 20:
-                            dataY[2] == 3? text ="": text = '20';
-                            break;
-                          case 22:      //--temperature
-                            dataY[2] ==1 ? text = '22': text ="";
-                            break;
-                          case 24: //--temperature
-                            dataY[2] ==1 ? text = '24': text ="";
-                            break;
-                          case 26: //--temperature
-                            dataY[2] ==1 ?  text = '26': text = "";
-                            break;
-                          case 28: //--temperature
-                            dataY[2] ==1 ? text = '28': text = "";
-                            break;
-                          case 30:
-                            dataY[2] == 3? text ="30": text = '30';
-                            break;
-                          case 32: //--temperature
-                            dataY[2] ==1 ? text = '32': text ="";
-                            break;
-                          case 34:
-                            dataY[2] ==1 ?  text = '34': text ="";
-                            break;
-                          case 36: //--temperature
-                            dataY[2] ==1 ?  text = '36': text ="";
-                            break;
-                          case 38: //--temperature
-                            dataY[2] ==1 ? text = '38': text="";
-                            break;
-                          case 40:
-                            dataY[2] == 3? text ="": text = '40';
-                            break;
-                          case 50:
-                            dataY[2] == 3? text ="": text = '50';
-                            break;
-                          case 60:
-                            dataY[2] == 3? text ="": text = '60';
-                            break;
-                          case 70:
-                            dataY[2] == 3? text ="": text = '70';
-                            break;
-                          case 80:
-                            dataY[2] == 3? text ="": text = '80';
-                            break;
-                          case 90:
-                            dataY[2] == 3? text ="": text = '90';
-                            break;
-                          case 100:
-                            dataY[2] == 3? text ="100": text = '100';
-                            break;
-                          case 200:
-                            text = "200";
-                            break;
-                          case 300:
-                            text = "300";
-                            break;
-                          case 400:
-                            text = "400";
-                            break;
-                          case 500:
-                            text = "500";
-                            break;
-                          case 600:
-                            text = "600";
-                            break;
-                          case 1000:
-                            text = "1k";
-                            break;
-                          case 2000:
-                            text = "2k";
-                            break;
-                          case 3000:
-                            text = "3k";
-                            break;
-                          case 4000:
-                            text = "4k";
-                            break;
-                          case 5000:
-                            text = "5k";
-                            break;
-                          case 6000:
-                            text = "6k";
-                            break;
-                          case 7000:
-                            text = "7k";
-                            break;
-                          case 8000:
-                            text = "8k";
-                            break;
-                          case 9000:
-                            text = "9k";
-                            break;
-                          case 10000:
-                            text = "10k";
-                            break;
-                          default:
-                            return Container();
-                        }
+                        //--------------max---------------------
+                        if (value.toInt() == dataY[0]) text = dataY[0].toString();
+                        //-------------min --------------------
+                        else if (value.toInt() == dataY[1]) text = dataY[1].toString();
+                        // ------------------Mức 1----------------------------
+                        else if(value.toInt() == (dataY[1]+(dataY[0]-dataY[1])~/3).toInt()) text = (dataY[1]+(dataY[0]-dataY[1])~/3).toString();
+                        // -------------------Mức 2---------------------------
+                        else if(value.toInt() == (dataY[1]+(dataY[0]-dataY[1])~/3*2).toInt()) text = (dataY[0]-(dataY[0]-dataY[1])~/3).toString();
+
+                        //------------DEFAULT---------------------------
+                        else text = "";
+                        //=====================END IF =========================
                         return Text(
                             text, style: style, textAlign: TextAlign.center);
                       },
@@ -362,8 +246,8 @@ class _ChartHomePageState extends State<ChartHomePage> {
                 ],
                 minX: 0,
                 maxX: 13,
-                maxY: double.parse(((double.parse(dataY[0].toString()).toInt())~/10 *10 +10 ).toString()),
-                minY: double.parse(((double.parse(dataY[1].toString()).toInt())~/10 *10 ).toString()),
+                maxY: double.parse(dataY[0].toString()),
+                minY: double.parse(dataY[1].toString()),
               )
           )
       );
