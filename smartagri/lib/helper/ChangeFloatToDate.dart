@@ -10,19 +10,82 @@ class Changes{
     return DateTime.fromMillisecondsSinceEpoch(millis.toInt(), isUtc: true);
   }
 
-  int roundData(String n,bool checkMaxMin){
+  String getThousand(int n){
+    String s= n.toString();
+    String s1="";
+    // s1 = s.substring(0,s.length-1);
+    for (int i=0;i<s.length-1;i++){
+      s1 = s1+ s[i];
+    }
+    return s1;
+  }
+  String getHundred(int n){
+    String s= n.toString();
+    String s1="";
+    // s1 = s.substring(0,s.length-1);
+    s1=s[s.length-1];
+    // for (int i=0;i<s.length-1;i++){
+    //   s1 = s1+ s[i];
+    // }
+    return s1;
+  }
+
+  int roundDataV2(String n,bool checkMaxMin){
     // checkMaxMin = true => max
     // checkMaxMin = false => min
     double tam = double.parse(n);
     int tamInt ;
     tamInt =  tam.toInt();
+    print('tam = $tamInt');
+
     // print('int = $tamInt');
-    int length = tam.toString().length-1;
+    int length = tamInt.toString().length ;
     // print('length = $length');
     int s=1;
 
-    for (int i=1; i<length-1 ;i++) s=s*10;
-    // print('somu = $s');
+    for (int i=1; i<length ;i++) s=s*10;
+    print('somu = $s');
+
+
+
+    // int tamInt = int.parse((tam ~/ s).toString());
+    tamInt=tamInt ~/ s;
+    // print('Dư: $tamInt');
+
+    int miner = 5 * s ~/10;
+    miner = miner + (tamInt)*s;
+    print("miner = $miner");
+
+    if (checkMaxMin) {
+      // int t= tamint;
+      tamInt = (tamInt + 1) * s;
+
+      if ((length >= 3) &&(tam.toInt() < miner))
+      {
+        tamInt = miner;
+      }
+    } else {
+      tamInt = tamInt * s;
+    }
+    return tamInt;
+  }
+
+
+  int roundDataV1(String n,bool checkMaxMin){
+    // checkMaxMin = true => max
+    // checkMaxMin = false => min
+    double tam = double.parse(n);
+    int tamInt ;
+    tamInt =  tam.toInt();
+    print('tam = $tamInt');
+
+    // print('int = $tamInt');
+    int length = tamInt.toString().length;
+    // print('length = $length');
+    int s=1;
+
+    for (int i=1; i<length ;i++) s=s*10;
+    print('somu = $s');
 
 
 
@@ -47,6 +110,8 @@ class Changes{
     }
     return tamInt;
   }
+
+
 
   String Div10 (num n){
     double tam = double.parse(n.toString());

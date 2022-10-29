@@ -29,6 +29,7 @@ class _ChartScreenState extends State<ChartScreen> {
 
   List dataSlider = [];
 
+  //-------- CHANGES LIST DATA WHEN CHOOSE MENU (NHIET DO, DO AM, ANH SANG)----------
   setDefaultMINMAXY(){
     setState(() {
       double maxy=0;
@@ -60,7 +61,6 @@ class _ChartScreenState extends State<ChartScreen> {
       m3 = double.parse(tam.reduce(max).toString());
       min3 = double.parse(tam.reduce(min).toString());
 
-
       maxy= m1;
       if (maxy < m2) maxy =m2;
       if (maxy < m3) maxy = m3;
@@ -69,11 +69,14 @@ class _ChartScreenState extends State<ChartScreen> {
       if(miny > min2) miny = min2;
       if(miny > min3) miny = min3;
 
+      print('max = $maxy min = $miny');
+
       dataY.removeRange(0, 3);
-      dataY.add(Changes().roundData(maxy.toString(), true));
-      dataY.add(Changes().roundData(miny.toString(), false));
+      dataY.add(Changes().roundDataV2(maxy.toString(), true));
+      dataY.add(Changes().roundDataV2(miny.toString(), false));
       dataY.add(indexMenu);
       print("max arr = ${dataY[0]} ---  ${dataY[1]}");
+      print('Thousand = ${Changes().getThousand(150)} hundred ${Changes().getHundred(155)}');
 
       //Add data to dataSlider
       dataSlider.removeRange(0, dataSlider.length);
@@ -112,6 +115,7 @@ class _ChartScreenState extends State<ChartScreen> {
       }
       else
       {
+        // double t1= double.parse(data)
         dataSlider.add(dataHome[0].light1); dataSlider.add(dataHome[0].light2); dataSlider.add(dataHome[0].light3);
         dataSlider.add(dataHome[0].AS_A1_MIN);
         dataSlider.add(dataHome[0].AS_A2_MIN);
@@ -130,60 +134,54 @@ class _ChartScreenState extends State<ChartScreen> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      // print(BodyChartScreen().);
       dataChart.removeRange(0, dataChart.length);
       for (int i=11;i>=0;i--){
         var t1 = double.parse(dataHome[i].temperature1.toString())/10;
         var t2 = double.parse(dataHome[i].temperature2.toString())/10;
         var t3 = double.parse(dataHome[i].temperature3.toString())/10;
 
-        var tam =
-        chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
+        var tam = chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
         dataChart.add(tam);
-        // dataChart.add(1.0);
       }
       setDefaultMINMAXY();
-
-      // for (int i=0;i<12;i++){
-      //   print("${dataChart[i].date}  ${dataChart[i].time}");
-      // }
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.purple[100] ,
-          gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xffe1bee7),
-                Color(0xfff3e5f5),
-                Color(0xffFFFFFF)
-              ]
-          )
-      ),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          //-----------------MENU ---------------------------------------------
-          Stack(
-            children: <Widget>[
-              Pannel(),
-              Menu(),
-            ],
-          ),
-
-          BodyChartScreen(),
-
-        ],
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.purple[100] ,
+            gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xffe1bee7),
+                  Color(0xfff3e5f5),
+                  Color(0xffFFFFFF)
+                ]
+            )
+        ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            //-----------------MENU ---------------------------------------------
+            Stack(
+              children: <Widget>[
+                Pannel(),
+                MenuContainer(),
+              ],
+            ),
+            //---------------BODY-------------------
+            BodyChartScreen(),
+          ],
+        ),
       ),
     );
   }
 
+  //--------------------------------BODY STATEFULL ------------------------------------------
   Widget BodyChartScreen()=>Expanded(
     child: SingleChildScrollView(
       child: Container(
@@ -199,7 +197,7 @@ class _ChartScreenState extends State<ChartScreen> {
 
             //------------FOOTER-------------------
             Container(
-              height: 20,
+              height: 5,
             ),
           ],
         ),
@@ -207,6 +205,7 @@ class _ChartScreenState extends State<ChartScreen> {
     ),
   );
 
+  //-------------3 THÔNG BẢNG PANEL : GIÁ TRỊ HIỆN TẠI, TRẠNG THÁI CÔNG TẮC, MIN MÃ 3 KHU VỰC ---------------
   Widget SliderValue()=>SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     child: Padding(
@@ -217,7 +216,7 @@ class _ChartScreenState extends State<ChartScreen> {
             children: [
               // ---------------SLIDER 1-----------------------------
               Container(
-                width: MediaQuery.of(context).size.width/3,
+                // width: MediaQuery.of(context).size.width/3,
                 // height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -267,7 +266,7 @@ class _ChartScreenState extends State<ChartScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 15,right: 15),
                 child: Container(
-                  width: MediaQuery.of(context).size.width/3,
+                  width: MediaQuery.of(context).size.width*2/5,
                   // height: 40,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -410,6 +409,7 @@ class _ChartScreenState extends State<ChartScreen> {
     ),
   );
 
+  //----------------------------------CHART COMPONENT----------------------------------
   Widget ChartComponentImport()=>Padding(
     padding: const EdgeInsets.only(top: 5,left: 5,right: 5),
     child: Container(
@@ -437,9 +437,9 @@ class _ChartScreenState extends State<ChartScreen> {
                   children: [
                     Text('Biểu đồ giá trị  ',style: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold)),
                     indexMenu ==1?
-                    Text('Nhiệt Độ',style: TextStyle(fontSize: 18,color: Colors.red,fontWeight: FontWeight.bold))
-                        : indexMenu == 2? Text('Độ Ẩm',style: TextStyle(fontSize: 18,color: Colors.blue,fontWeight: FontWeight.bold))
-                        : Text('Ánh Sáng',style: TextStyle(fontSize: 18,color: Colors.green,fontWeight: FontWeight.bold)),
+                    Text('Nhiệt Độ',style: TextStyle(fontSize: 18,color: Colors.deepPurpleAccent,fontWeight: FontWeight.bold))
+                        : indexMenu == 2? Text('Độ Ẩm',style: TextStyle(fontSize: 18,color: Colors.deepPurpleAccent,fontWeight: FontWeight.bold))
+                        : Text('Ánh Sáng',style: TextStyle(fontSize: 18,color: Colors.deepPurpleAccent,fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -481,130 +481,171 @@ class _ChartScreenState extends State<ChartScreen> {
     ),
   );
 
-  // Widget Detail(int n)=>Padding(
-  //   padding: const EdgeInsets.all(8.0),
-  //   child: Container(
-  //     width: MediaQuery.of(context).size.width /2,
-  //     height: 50,
-  //     decoration: BoxDecoration(
-  //       color: Colors.pink,
-  //       borderRadius: BorderRadius.circular(25)
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Text('')
-  //       ],
-  //     ),
-  //   ),
-  // );
-
-  Widget ThreeDetail()=>Padding(
-    padding: const EdgeInsets.only(left: 10,top: 30,right: 10,bottom: 15),
-    child: Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width/2-20,
-            // height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
+  Widget MenuContainer()=>Padding(
+    padding: const EdgeInsets.only(top:60),
+    child: Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 3/4 ,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25,right: 25,bottom: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top:15,bottom: 8),
-                    child: Text("Hiện tại",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("KV1: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      Text(' ON'),
-                    ],
-                  ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("KV2: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      Text(' ON'),
-                    ],
-                  ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("KV3: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      Text(' OFF'),
-                    ],
-                  )
-                ],
-              ),
-            ),
+          ],
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            MenuBackground(),
+            MenuAnimation(),
+          ],
+        )
+      ),
+    ),
+  );
+  Widget MenuAnimation()=>AnimatedAlign(
+    duration: Duration(milliseconds: 300),
+    alignment: indexMenu ==  1 ? Alignment.centerLeft:
+        indexMenu == 2 ? Alignment.center : Alignment.centerRight,
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+          decoration: BoxDecoration(
+              color: Colors.deepPurpleAccent,
+              borderRadius: BorderRadius.circular(50)
           ),
-
-          Container(
-            width: MediaQuery.of(context).size.width/2-20,
-            // height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25,right: 25,bottom: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top:15,bottom: 8),
-                    child: Text("Hiện tại",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("KV1: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      Text(' ON'),
-                    ],
-                  ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("KV2: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      Text(' ON'),
-                    ],
-                  ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("KV3: ",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      Text(' OFF'),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-
-        ],
-      )
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: indexMenu ==1 ?  Text(' Nhiệt độ ',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white)):
+                  indexMenu == 2?  Text('  Độ ẩm  ',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white)):
+                  Text(' Ánh sáng ',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white))
+          )
+      ),
     ),
   );
 
+  Widget MenuBackground()=> Container(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        //----------Menu Nhiệt Độ----------
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              indexMenu=1;
+              index = 1;
+
+              dataChart.removeRange(0, dataChart.length);
+              for (int i=11; i>=0;i--){
+                var t1 = double.parse(dataHome[i].temperature1.toString())/10;
+                var t2 = double.parse(dataHome[i].temperature2.toString())/10;
+                var t3 = double.parse(dataHome[i].temperature3.toString())/10;
+
+                var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
+                dataChart.add(tam);
+              }
+              // print('-----------------------');
+              setDefaultMINMAXY();
+              // index = 1;
+              // for (int i=0;i<12;i++){
+              //   print("${dataChart[i].date}  ${dataChart[i].time} ${dataChart[i].n1} ${dataChart[i].n2} ${dataChart[i].n3}");
+              // }
+            });
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Nhiệt độ',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.deepPurple)),
+              )
+          ),
+        ),
+
+        //----------Menu Độ ẩm----------
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              indexMenu=2;
+              // index = 2;
+              dataChart.removeRange(0, dataChart.length);
+              for (int i=11;i>=0;i--){
+                var t1 = double.parse(dataHome[i].humidity1.toString())/10;
+                var t2 = double.parse(dataHome[i].humidity2.toString())/10;
+                var t3 = double.parse(dataHome[i].humidity3.toString())/10;
+
+                var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
+                dataChart.add(tam);
+              }
+              // print('-----------------------');
+              setDefaultMINMAXY();
+
+              // for (int i=0;i<12;i++){
+              //   print("${dataChart[i].date}  ${dataChart[i].time} ${dataChart[i].n1} ${dataChart[i].n2} ${dataChart[i].n3}");
+              // }
+            });
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Độ ẩm',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.deepPurple),),
+              )
+          ),
+        ),
+
+        //----------Menu Ánh sáng----------
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              indexMenu=3;
+              // index = 3;
+
+              dataChart.removeRange(0, dataChart.length);
+              for (int i=11 ; i>=0 ; i--){
+                var t1 = double.parse(dataHome[i].light1.toString())/100;
+                var t2 = double.parse(dataHome[i].light2.toString())/100;
+                var t3 = double.parse(dataHome[i].light3.toString())/100;
+                // print
+                var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
+                dataChart.add(tam);
+              }
+              // print('-----------------------');
+              setDefaultMINMAXY();
+
+              // for (int i=0;i<12;i++){
+              //   print("${dataChart[i].date}  ${dataChart[i].time} ${dataChart[i].n1} ${dataChart[i].n2} ${dataChart[i].n3}");
+              // }
+            });
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:Text('Ánh sáng',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.deepPurple),),
+              )
+          ),
+        ),
+      ],
+    ),
+  );
+
+  //----------------------------------MENU NHIỆT ĐỘ, ĐỘ ẨM, ÁNH SÁNG----------------------------------
   Widget Menu()=>Padding(
     padding: const EdgeInsets.only(top:60),
     child: Center(
@@ -652,7 +693,7 @@ class _ChartScreenState extends State<ChartScreen> {
               },
               child: Container(
                   decoration: BoxDecoration(
-                    color: indexMenu == 1 ? Colors.red : Colors.white,
+                    color: indexMenu == 1 ? Colors.deepPurpleAccent : Colors.white,
                     borderRadius: BorderRadius.circular(50)
                   ),
                   child: Padding(
@@ -688,7 +729,7 @@ class _ChartScreenState extends State<ChartScreen> {
               },
               child: Container(
                   decoration: BoxDecoration(
-                      color: indexMenu == 2 ? Colors.blue : Colors.white,
+                      color: indexMenu == 2 ? Colors.deepPurpleAccent : Colors.white,
                       borderRadius: BorderRadius.circular(50)
                   ),
                   child: Padding(
@@ -708,10 +749,10 @@ class _ChartScreenState extends State<ChartScreen> {
 
                   dataChart.removeRange(0, dataChart.length);
                   for (int i=11 ; i>=0 ; i--){
-                    var t1 = double.parse(dataHome[i].light1.toString());
-                    var t2 = double.parse(dataHome[i].light2.toString());
-                    var t3 = double.parse(dataHome[i].light3.toString());
-
+                    var t1 = double.parse(dataHome[i].light1.toString())/100;
+                    var t2 = double.parse(dataHome[i].light2.toString())/100;
+                    var t3 = double.parse(dataHome[i].light3.toString())/100;
+                    // print
                     var tam =chartData(dataHome[i].date,dataHome[i].time, t1, t2,  t3 );
                     dataChart.add(tam);
                   }
@@ -725,7 +766,7 @@ class _ChartScreenState extends State<ChartScreen> {
               },
               child: Container(
                   decoration: BoxDecoration(
-                      color: indexMenu == 3 ? Colors.green : Colors.white,
+                      color: indexMenu == 3 ? Colors.deepPurpleAccent : Colors.white,
                       borderRadius: BorderRadius.circular(50)
                   ),
                   child: Padding(
@@ -741,6 +782,7 @@ class _ChartScreenState extends State<ChartScreen> {
     ),
   );
 
+  //--------------TITLE SCREEN-------------------
   Widget Pannel()=>Container(
     width: MediaQuery.of(context).size.width,
     // height: 50,

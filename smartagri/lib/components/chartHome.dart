@@ -149,18 +149,103 @@ class _ChartHomePageState extends State<ChartHomePage> {
                           fontSize: 14,
                         );
                         String text;
-                        //--------------max---------------------
-                        if (value.toInt() == dataY[0]) text = dataY[0].toString();
-                        //-------------min --------------------
-                        else if (value.toInt() == dataY[1]) text = dataY[1].toString();
-                        // ------------------Mức 1----------------------------
-                        else if(value.toInt() == (dataY[1]+(dataY[0]-dataY[1])~/3).toInt()) text = (dataY[1]+(dataY[0]-dataY[1])~/3).toString();
-                        // -------------------Mức 2---------------------------
-                        else if(value.toInt() == (dataY[1]+(dataY[0]-dataY[1])~/3*2).toInt()) text = (dataY[0]-(dataY[0]-dataY[1])~/3).toString();
+                        //------------------MAX---------------------
+                        if(value.toInt() == dataY[0]) {
+                          // print (dataY[0]);
+                          if (dataY[2]==3 ) {
+                            if (Changes().getHundred(dataY[0])=="0"){
+                              text = Changes().getThousand(dataY[0]) + "k";
+                            }else text = Changes().getThousand(dataY[0]) + "k" + Changes().getHundred(dataY[0]);
+                          }
+                          else text = dataY[0].toString();
+                        }
+                        //------------------MIN---------------------
+                        else if(value.toInt() == dataY[1]) {
+                          if (dataY[2]==3 ) {
+                            if (dataY[1] == 0){
+                              text = "0";
+                            }else {
+                              if (Changes().getHundred(dataY[1])=="0"){
+                                text = Changes().getThousand(dataY[1]) + "k";
+                              }else text = Changes().getThousand(dataY[1]) + "k" + Changes().getHundred(dataY[1]);
+                            }
+                          }
+                          else text = dataY[1].toString();
+                        }
+                        //------------------4 GIA TRI---------------------
+                        else if((dataY[0] - dataY[1]) % 3 == 0) {
+                          int tam= (dataY[0]- dataY[1]) ~/ 3;
+                          // print('tam chart $tam');
+                          if (dataY[1] +  tam == value.toInt())
+                            {
+                              if (dataY[2] == 3 ) {
+                                text = Changes().getThousand(dataY[1] +  tam) + "k";
+                                if (Changes().getHundred(dataY[1] +  tam) == "0") text = text + "";
+                                  else text = text + Changes().getHundred(dataY[1] +  tam);
+                              }
+                              else text = (dataY[1] +  tam).toString();
+                            }
+                          else {
+                            if (dataY[0] -  tam == value.toInt())
+                            {
+                              if (dataY[2]==3 ) {
+                                text = Changes().getThousand(dataY[0] -  tam) + "k";
+                                if (Changes().getHundred(dataY[0] -  tam) == "0") text = text + "";
+                                else text = text +Changes().getThousand(dataY[0] -  tam);
+                              }
+                              else text = (dataY[0] -  tam).toString();
+                            } else text = "";
+                          }
+                        }
+                        //------------------5 GIA TRI---------------------
+                        else if((dataY[0] - dataY[1]) % 4 == 0) {
+                          int tam= (dataY[0]- dataY[1]) ~/ 4;
+                          // print('tam chart $tam');
+                          if (dataY[1] +  tam == value.toInt())
+                          {
+                            if (dataY[2]==3 ) {
+                              text = Changes().getThousand(dataY[1] +  tam) + "k";
+                              if (Changes().getHundred(dataY[1] +  tam) == "0") text = text + "";
+                              else text = text +Changes().getHundred(dataY[1] +  tam);
+                            }
+                            else text = (dataY[1] +  tam).toString();
+                          }
+                          else {
+                            if (dataY[0] -  tam == value.toInt())
+                            {
+                              if (dataY[2]==3 ) {
+                                text = Changes().getThousand(dataY[0] -  tam) + "k";
+                                if (Changes().getHundred(dataY[0] -  tam) == "0") text = text + "";
+                                else text = text + Changes().getHundred(dataY[0] -  tam);
+                              }
+                              else text = (dataY[0] -  tam).toString();
+                            } else
+                                if(dataY[0] -  tam * 2 == value.toInt()){
+                                      if (dataY[2]==3 ) {
+                                        text = Changes().getThousand(dataY[0] -  tam*2) + "k";
+                                        if (Changes().getHundred(dataY[0] -  tam*2) == "0") text = text + "";
+                                        else text = text + Changes().getHundred(dataY[0] -  tam*2);
+                                      }
+                                      else text = (dataY[0] -  tam*2).toString();
+                                } else text = "";
+                          }
+                        }
 
-                        //------------DEFAULT---------------------------
-                        else text = "";
-                        //=====================END IF =========================
+                        //-----------------3 GIA TRI ---------------
+                        else  if((dataY[0] - dataY[1]) % 2 == 0){
+                          int tam= (dataY[0]- dataY[1]) ~/ 2;
+                          if (dataY[1] +  tam == value.toInt()) {
+                            if (dataY[2]==3 ) {
+                              text = Changes().getThousand(dataY[0] -  tam) + "k";
+                              if (Changes().getHundred(dataY[0] -  tam) == "0") text = text + "";
+                              else text = text +Changes().getHundred(dataY[0] -  tam);
+                            }
+                            else text = (dataY[0] -  tam).toString();
+                          }
+                          else text="";
+                        }
+                        else text="";
+
                         return Text(
                             text, style: style, textAlign: TextAlign.center);
                       },

@@ -3,6 +3,7 @@ import 'package:smartagri/Screen/AccoutScreen.dart';
 import 'package:smartagri/Screen/ListScreen.dart';
 import 'package:smartagri/Screen/HomeScreen.dart';
 import 'package:smartagri/Screen/ListScreen.dart';
+import 'package:smartagri/Screen/SettingScreen.dart';
 import 'package:smartagri/components/ListComponent.dart';
 import 'package:smartagri/data/datasetField.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -40,6 +41,9 @@ class _ManagerScreenState extends State<ManagerScreen> {
 
   ];
   bool CheckLoadData = false;
+  List<DataSet> list1=[];
+  List<DataSet> list2=[];
+  List<DataSet> list3=[];
 
   @override
   void initState() {
@@ -59,23 +63,36 @@ class _ManagerScreenState extends State<ManagerScreen> {
 
 
   Future getDataGgSheet() async {
+    await DataSheetApi.initSend();
     final dataTam = await DataSheetApi.getAll();
+
 
     setState(() {
       listData = dataTam;
+      //-----------Data Home--------
+      list1.removeRange(0, list1.length);
+      list1.add(listData[0]);
+      //---------DataChart ------------
+      list2.removeRange(0,list2.length);
+      for (int i=0;i< 15;i++) list2.add(listData[i]);
+      // //---------DataList----------
+      // list3.removeRange(0,list3.length);
+      // for (int i=0;i< 100;i++) list3.add(listData[i]);
+
       CheckLoadData = true;
     });
 
     if(CheckLoadData) {
       print('Loading Data Success');
-      print(listData[1].humidity1.toString());
+      // print(listData[1].humidity1.toString());
       setState(() {
         screens =[
-          HomeScreen(dataHome: listData),
-          ChartScreen(dataHome: listData),
+          HomeScreen(dataHome: list1),
+          ChartScreen(dataHome: list2),
           ListScreen(dataHome: listData),
+          SettingScreen(dataHome: list1,),
           AccountScreen(),
-          ListComponent(dataHome: listData,),
+          // ListComponent(dataHome: listData,),
 
         ];
       });
@@ -87,7 +104,10 @@ class _ManagerScreenState extends State<ManagerScreen> {
     Icon(Icons.home, size: 30),
     Icon(Icons.bar_chart_rounded, size:30),
     Icon(Icons.format_list_bulleted_rounded, size :30),
-    Icon(Icons.notifications_active, size: 30),
+    Icon(Icons.miscellaneous_services_rounded, size: 30),
+    // handyman_rounded
+    // miscellaneous_services_rounded
+    // settings
     Icon( Icons.account_circle, size: 30),
   ];
 
@@ -116,7 +136,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
             color: Color(0xff6849ef),
             buttonBackgroundColor: Color(0xff6849ef),
             backgroundColor: Colors.transparent,
-            height: 70,
+            height: 60,
             items: items,
             index: index,
             onTap: (index)=> setState(()=> this.index=index),

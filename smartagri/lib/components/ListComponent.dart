@@ -189,7 +189,7 @@ class _ListComponentState extends State<ListComponent> {
   //---------------Cột Số thứ tự---------------------
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(index.toString()),
+      child: Text(index.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
       width: 50,
       height: 52,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),

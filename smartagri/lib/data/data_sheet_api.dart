@@ -1,4 +1,5 @@
 import 'package:gsheets/gsheets.dart';
+import 'dataSendField.dart';
 
 import 'datasetField.dart';
 
@@ -23,6 +24,7 @@ class DataSheetApi{
 
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
+  static Worksheet? _sendSheet;
 
   static Future init() async{
     try{
@@ -41,6 +43,25 @@ class DataSheetApi{
     final firstRow = DataSetFields.getFields();
 
     _userSheet!.values.insertRow(1, firstRow);
+  }
+
+  static Future initSend() async{
+    try{
+      final  spreedsheet = await _gsheets.spreadsheet(_spreadsheetId);
+      _sendSheet= await _getWorkSheet(spreedsheet, title: 'Setting');
+
+      final firstRow = DataSendSetFields.getSendFields();
+
+      _sendSheet!.values.insertRow(1, firstRow);
+    }catch (e){
+      print("init error: $e");
+    }
+    final  spreedsheet = await _gsheets.spreadsheet(_spreadsheetId);
+    _sendSheet= await _getWorkSheet(spreedsheet, title: 'Setting');
+
+    final firstRow = DataSendSetFields.getSendFields();
+
+    _sendSheet!.values.insertRow(1, firstRow);
   }
 
   static Future <Worksheet> _getWorkSheet(
@@ -84,5 +105,18 @@ class DataSheetApi{
   static Future insert(List<Map<String, dynamic>> rowList) async{
     if (_userSheet == null ) return ;
     _userSheet!.values.map.appendRows(rowList);
+  }
+
+  //--------------------SEND----------------------------
+  static Future <DataSendSet?> getLastRowSend() async{
+    if (_sendSheet == null ) return null;
+
+    final json = await _sendSheet!.values.map.lastRow();
+    return json == null ? null :  DataSendSet.fromJson(json);
+  }
+
+  static Future insertSend(List<Map<String, dynamic>> rowList) async{
+    if (_sendSheet == null ) return ;
+    _sendSheet!.values.map.appendRows(rowList);
   }
 }

@@ -24,49 +24,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child:
-                ListView(
-                  children: <Widget>[
-                    Text(''),
-                      Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //---------- Hien thi thoi gian, ngay thang va logo Smart Agri--------------
-                    Taskbar(),
+    return SafeArea(
+      child: Center(
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child:
+                  ListView(
+                    children: <Widget>[
+                      Text(''),
+                        Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      //---------- Hien thi thoi gian, ngay thang va logo Smart Agri--------------
+                      Taskbar(),
 
-                    //------------------Text Title Screen -------------------
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: TextHome('Thông số cảm biến', 30, true,Colors.black),
-                    ),
+                      //------------------Text Title Screen -------------------
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: TextHome('Thông số cảm biến', 30, true,Colors.black),
+                      ),
 
-                    // -------------Table thông số-------------------
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: PanelHome(1, dataHome[0].temperature1!, dataHome[0].humidity1!, dataHome[0].light1!),
-                    ),
+                      // -------------Table thông số-------------------
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25),
+                        child: PanelHome(1, dataHome[0].temperature1!, dataHome[0].humidity1!, dataHome[0].light1!),
+                      ),
 
-                    // -----------------chú thích và ảnh cây sa nhân tím----------------
-                    NoteDetail(),
-                  ],
+                      // -----------------chú thích và ảnh cây sa nhân tím----------------
+                      NoteDetail(),
+                    ],
+                  ),
+                    ],
+                  )
                 ),
-                  ],
-                )
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+      ),
     );
   }
 
@@ -113,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.thermostat,size: 30),
+                      Icon(Icons.thermostat,size: 25),
                       Text(' Nhiệt độ  ',style: TextStyle(fontSize: 20),),
                       Text('℃',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.red),)
                     ],
@@ -123,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(top:10,bottom: 10),
                     child: Row(
                       children: [
-                        Icon(Icons.water_drop,size: 30),
+                        Icon(Icons.water_drop,size: 25),
                         Text(' Độ ẩm ',style: TextStyle(fontSize: 20),),
                         Text("%",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.blue),)
                       ],
@@ -132,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   Row(
                     children: [
-                      Icon(Icons.light_mode,size: 30,),
+                      Icon(Icons.light_mode,size: 25,),
                       Text(' Ánh sáng ',style: TextStyle(fontSize: 20),),
                       Text("lux ",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.green),)
                     ],
@@ -237,6 +239,14 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
 
       child: Padding(

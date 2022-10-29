@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:smartagri/components/ListComponent.dart';
+import 'package:smartagri/data/BloC.dart';
 
 import '../data/datasetField.dart';
 import '../helper/ChangeFloatToDate.dart';
@@ -17,12 +18,13 @@ class _ListScreenState extends State<ListScreen> {
   final List <DataSet> dataHome;
   _ListScreenState(this.dataHome);
 
+  // List<DataSe>
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     // ------------init gia tri lọc: gia trị bắt đầu, kết thúc;---------------
     // giá trị thời ian lớn nhất và nhỏ nhất để kiểm tra lỗi loc -----------------
     setState(() {
@@ -44,7 +46,16 @@ class _ListScreenState extends State<ListScreen> {
           Changes().changeDoubleToDate(dataHome[0].date!).day);
     });
     //---------------loc gia tri để lấy thông số ngày cuối cùng------------------
-    LocData();
+    // LocData();
+    setState(() {
+      dataTam.removeRange(0, dataTam.length);
+      for (int i=0;i<dataHome.length;i++)
+        if (dataHome[i].date == dataHome[0].date) dataTam.add(dataHome[i]);
+        else break;
+      print('Init dc ${dataTam.length} hang du lieu trong ${dataHome.length}');
+    });
+
+    // setParameter();
   }
 
   //----------------------------------------------------------------
@@ -64,12 +75,17 @@ class _ListScreenState extends State<ListScreen> {
   //----------------------------------------------------------------
   //----------------------------------------------------------------
 
+  // void setParameter () async{
+  //   // setState(()  {
+  //     listData = await BloC().initAPI();
+  //   // });
+  // }
 //-------------------------function loc du lieu-----------------
   void LocData(){
     DateTime datatam = DateTime(2021, 11, 27);
     setState(() {
       dataTam.removeRange(0, dataTam.length);
-      print('du lieu :');
+      // print('du lieu :');
 
       for(int i=0 ; i<dataHome.length ; i++)
       {
@@ -82,16 +98,17 @@ class _ListScreenState extends State<ListScreen> {
         if(dateStart.compareTo(datatam)<=0 && dateFinish.compareTo(datatam) >= 0)
         {
           dataTam.add(dataHome[i]);
-          print('${datatam.day} / ${datatam.month} / ${datatam.year}');
+          // print('${datatam.day} / ${datatam.month} / ${datatam.year}');
         }
       }
 
-      print('Sau khi loc dc ${dataTam.length} hang du lieu');
+      print('Sau khi loc dc ${dataTam.length} hang du lieu trong ${dataHome.length}');
     });
   }
 
   static const int sortName = 0;
-  static const int sortStatus = 1;
+  // static const int sortStatus = 1;
+  List <DataSet> listData = [];
   bool isAscending = true;
   int sortType = sortName;
 
@@ -99,22 +116,24 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          //-----------------------------Pannel Tiêu đề-----------------------------------
-          PanelList(),
+    return SafeArea(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            //-----------------------------Pannel Tiêu đề-----------------------------------
+            PanelList(),
 
-          //----------------------------Pannel hiển thị số dòng dữ liệu được lọc------------------------------------
-          PanelLengthList(),
+            //----------------------------Pannel hiển thị số dòng dữ liệu được lọc------------------------------------
+            PanelLengthList(),
 
-          //-----------------Table dữ liệu được lọc --------------------
-          Flexible(
-              child:
-                ListComponent(dataHome: dataTam,)
-          )
-        ],
+            //-----------------Table dữ liệu được lọc --------------------
+            Flexible(
+                child:
+                  ListComponent(dataHome: dataTam,)
+            )
+          ],
+        ),
       ),
     );
   }
@@ -166,7 +185,7 @@ class _ListScreenState extends State<ListScreen> {
       ),
 
       Padding(
-        padding: const EdgeInsets.only(left: 40,bottom: 20,right: 40,top:15),
+        padding: const EdgeInsets.only(left: 30,bottom: 20,right: 30,top:15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -220,7 +239,7 @@ class _ListScreenState extends State<ListScreen> {
                 child: Center(
                   child: Text('  ${dateStart.day}/${dateStart.month}/${dateStart.year}  ',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.deepPurple,
                     ),
@@ -229,8 +248,8 @@ class _ListScreenState extends State<ListScreen> {
               ),
             ),
 
-            Text(' Đến ngày: ',style: TextStyle(
-              fontSize: 20,
+            Text('Đến ngày:',style: TextStyle(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),),
@@ -282,7 +301,7 @@ class _ListScreenState extends State<ListScreen> {
                 ),
                 child: Center(
                   child: Text('  ${dateFinish.day}/${dateFinish.month}/${dateFinish.year}  ',style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.deepPurple,
                   ),),

@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[200],
         body: Center(
           // child: ManagerScreen
           child: SafeArea(
@@ -43,10 +43,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 //Hello
                 // Icon(Icons.admin_panel_settings ,
                 //   size: 100,),
-                Image.asset('assets/images/smartAgri.png',
-                    width: MediaQuery.of(context).size.width *5/10,
-                    height: MediaQuery.of(context).size.width *5/10,
-                    fit: BoxFit.fill
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Image.asset('assets/images/smartAgri.png',
+                      width: MediaQuery.of(context).size.width *5/10,
+                      height: MediaQuery.of(context).size.width *5/10,
+                      fit: BoxFit.fill
+                  ),
                 ),
 
                 SizedBox(height: 25,),
@@ -65,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.grey[50],
+                        color: Colors.grey[100],
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(15)
                     ),
@@ -87,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.grey[50],
+                        color: Colors.grey[100],
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(15)
                     ),
